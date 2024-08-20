@@ -40,11 +40,12 @@ class Program
 
         Console.WriteLine("--------------------------------");
 
-        // 2000 yılı öncesi çıkış yapmış ve pop müzik yapan şarkıcılar
+        // 2000 yılı öncesi çıkış yapmış ve pop müzik yapan şarkıcılar, gruplayarak sıralama
         var pre2000PopSingers = singers
             .Where(s => s.DebutYear < 2000 && s.MusicGenre.Contains("Pop"))
-            .OrderBy(s => s.DebutYear)
-            .ThenBy(s => s.FirstName)
+            .GroupBy(s => s.DebutYear)
+            .OrderBy(g => g.Key) // Çıkış yılına göre sıralama
+            .SelectMany(g => g.OrderBy(s => s.FirstName)) // Her grup içindeki şarkıcıları isimlerine göre sıralama
             .ToList();
 
         Console.WriteLine("\n2000 yılı öncesi çıkış yapmış ve pop müzik yapan şarkıcılar:");
